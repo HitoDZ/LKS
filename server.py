@@ -16,10 +16,20 @@ class Log_in(FlaskForm):
     password = wtforms.PasswordField("Password", validators=[Required()])
     submit = wtforms.SubmitField('Log in')
 
+class judgment(FlaskForm):
+    technique = wtforms.SelectField('technique', choices=[(str(i), i) for i in range(1, 11)])
+    production = wtforms.SelectField('production', choices=[(str(i), i) for i in range(1,11)])
+    teamwork = wtforms.SelectField('teamwork', choices=[(str(i), i) for i in range(1, 11)])
+    artistry = wtforms.SelectField('artistry', choices=[(str(i), i) for i in range(1, 11)])
+    musicality = wtforms.SelectField('musicality', choices=[(str(i), i) for i in range(1,11)])
+    show = wtforms.SelectField('show', choices=[(str(i), i) for i in range(1, 11)])
+    creativity = wtforms.SelectField('creativity', choices=[(str(i), i) for i in range(1, 11)])
+    submit = wtforms.SubmitField('OK')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'qpwoeiruty'
-csrf = CsrfProtect()
-csrf.init_app(app)
+
+
 
 
 @app.route("/home")
@@ -33,8 +43,12 @@ def log_in():
     if request.method == "GET":
         return render_template('log_in.html', form = form)
     elif request.method == "POST" :
-        return "Log in", 200
+        return redirect(url_for("mainStr", id="qwe"))
 
+@app.route("/<id>")
+def mainStr(id):
+    form = judgment()
+    return render_template("judgment.html", form = form)
 
 @app.route("/api/log_in", methods=["GET", "POST"])
 def log_in_api():
@@ -64,3 +78,5 @@ def check_passIs(log, password):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+###########################################################################

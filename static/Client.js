@@ -16,7 +16,6 @@ function resetError(container) {
   }
 }
 
-
 function valid(form){
 
   var validate = 1;
@@ -32,6 +31,7 @@ function valid(form){
     }
 
     resetError(elems.password.parentNode);
+    resetError(document.getElementById("log2"));
 
     if (!elems.password.value) {
 
@@ -87,7 +87,7 @@ function check_log_pass(elems) {
     if (xhr.readyState == 4 && xhr.status == 200) {
 
       resetError(document.getElementById("log1"));
-
+      resetError(document.getElementById("log2"));
       if(xhr.responseText == "uncorrect_log"){
 
          showError(document.getElementById("log1"),' The email you’ve entered doesn’t match any account. ');//Sign up for an account.
@@ -98,12 +98,29 @@ function check_log_pass(elems) {
 
       }else if(xhr.responseText == "Ok"){
 
-        form.submit()
+        document.getElementById("log_form").submit();
 
       }
     }
   };
 
   xhr.send(JSON.stringify(ch_login_pass));
+}
 
+/////////////////////////////////////////////////////judgment
+
+function ask(form){
+  var div = document.createElement('div');
+
+
+
+  div.className = "modal_box";
+  div.innerHTML = "<form method='post' id='forma'>Are you sure?<br>"+
+  "<input type='button' value='No' onclick=remove_modalBox()>&nbsp"+
+  "<input type='button' value='Yes'onclick=falert(this.form)></form>";
+  document.body.appendChild(div)
+}
+
+function remove_modalBox(){
+  document.body.removeChild(document.body.lastChild)
 }

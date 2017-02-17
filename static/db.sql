@@ -7,3 +7,5 @@ CREATE TABLE judge(judge_id int Primary Key,
                    comand_id VARCHAR(6) REFERENCES comands NOT NULL,
                    technique int, production int, teamwork int,artistry int,
                    musicality int,show int,creativity int);
+-- ---------------------------------------------------------------------------------------------------------------------------------------------
+Alter Table comands Add Column C_order int unique ;

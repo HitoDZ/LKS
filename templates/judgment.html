@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Reg</title>
+  <link href="{{url_for('static', filename = 'Style.css')}}" rel="stylesheet" media="all"/>
+  <script src="{{url_for('static', filename = 'Client.js')}}"></script>
+
+</head>
+<body>
+  <form method="post" class="Test">
+    <h1>Sign up</h1>
+    <table border="0" width="15%" >
+
+              <tr>
+              <td>{{form.technique(class='textbox')}}</td>
+              <td>{{form.technique.label }}</td>
+
+              </tr>
+              <tr>
+                <td>{{form.production(class='textbox')}}</td>
+
+              <td>{{form.production.label }}</td>
+              </tr>
+              <tr>
+                <td>{{form.teamwork(class='textbox')}}</td>
+
+              <td>{{form.teamwork.label }}</td>
+              </tr>
+              <tr>
+                <td>{{form.artistry(class='textbox')}}</td>
+
+              <td>{{form.artistry.label }}</td>
+              </tr>
+              <tr>
+                <td>{{form.musicality(class='textbox')}}</td>
+
+              <td>{{form.musicality.label }}</td>
+              </tr>
+              <tr>
+                <td>{{form.show(class='textbox')}}</td>
+
+              <td>{{form.show.label }}</td>
+              </tr>
+              <tr>
+                <td>{{form.creativity(class='textbox')}}</td>
+
+              <td>{{form.creativity.label }}</td>
+              </tr>
+            <!--  <tr><br></tr>-->
+            <!--   <tr><td colspan="4">{{form.submit(class='button')}}</td></tr>-->
+            </table>
+            <input type="button" onclick="ask(this.form)" value="Log in">
+          </form>
+
+
+        </body>
+      </html>
