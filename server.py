@@ -14,20 +14,22 @@ from wtforms.validators import Required, EqualTo
 class Log_in(FlaskForm):
     login = wtforms.StringField("Login", validators=[Required()])
     password = wtforms.PasswordField("Password", validators=[Required()])
-    submit = wtforms.SubmitField('Log in')
+#    submit = wtforms.SubmitField('Log in')
 
 class judgment(FlaskForm):
-    technique = wtforms.SelectField('technique', choices=[(str(i), i) for i in range(1, 11)])
-    production = wtforms.SelectField('production', choices=[(str(i), i) for i in range(1,11)])
-    teamwork = wtforms.SelectField('teamwork', choices=[(str(i), i) for i in range(1, 11)])
-    artistry = wtforms.SelectField('artistry', choices=[(str(i), i) for i in range(1, 11)])
-    musicality = wtforms.SelectField('musicality', choices=[(str(i), i) for i in range(1,11)])
-    show = wtforms.SelectField('show', choices=[(str(i), i) for i in range(1, 11)])
-    creativity = wtforms.SelectField('creativity', choices=[(str(i), i) for i in range(1, 11)])
+    technique = wtforms.SelectField('technique', choices=[(str(i), i) for i in range(0, 11)])
+    production = wtforms.SelectField('production', choices=[(str(i), i) for i in range(0,11)])
+    teamwork = wtforms.SelectField('teamwork', choices=[(str(i), i) for i in range(0, 11)])
+    artistry = wtforms.SelectField('artistry', choices=[(str(i), i) for i in range(0, 11)])
+    musicality = wtforms.SelectField('musicality', choices=[(str(i), i) for i in range(0,11)])
+    show = wtforms.SelectField('show', choices=[(str(i), i) for i in range(0, 11)])
+    creativity = wtforms.SelectField('creativity', choices=[(str(i), i) for i in range(0, 11)])
     submit = wtforms.SubmitField('OK')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'qpwoeiruty'
+csrf = CsrfProtect(app)
+csrf.init_app(app)
 
 
 
@@ -43,12 +45,19 @@ def log_in():
     if request.method == "GET":
         return render_template('log_in.html', form = form)
     elif request.method == "POST" :
-        return redirect(url_for("mainStr", id="qwe"))
+        user_id = get_userWhereLog(form.login.data).get('user_id')
+        return redirect(url_for("mainStr", id=user_id))
 
-@app.route("/<id>")
+@app.route("/<id>", methods=["GET", "POST"])
 def mainStr(id):
+    user = get_user(id)
     form = judgment()
-    return render_template("judgment.html", form = form)
+    if request.method == "GET" and user.get('login'):
+        if user.get('role'):
+            return "ADMIN", 200
+        return render_template("jProfile.html", user = user)
+    elif request.method == "POST":
+        return "POST", 200
 
 @app.route("/api/log_in", methods=["GET", "POST"])
 def log_in_api():
@@ -60,6 +69,23 @@ def log_in_api():
             elif not check_passIs(data.get("login"), data.get("pass")):
                 return "uncorrect_pass", 200
             return "Ok", 200
+
+@app.route("/judgment/<id>", methods=["GET", "POST"])
+def jComand(id):
+    comand = get_comandInfo(id)
+    form = judgment()
+    if request.method == "GET":
+        return render_template("judgment.html", form = form, comand = comand)
+    elif request.method == "POST":
+        return "POST", 200
+
+def get_userWhereLog(log):
+    with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
+        sel = db.prepare("SELECT * FROM log_pass WHERE login=$1;")
+        user = sel(log.lower())
+    if user[0]:
+        return user[0]
+    return{}
 
 def check_logIs(log):
     with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
@@ -75,6 +101,22 @@ def check_passIs(log, password):
     if user:
         return True
     return False
+
+def get_comandInfo(id):
+    with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
+        sel = db.prepare("SELECT * FROM comands WHERE comand_id=$1 ")
+        com = sel(id)
+    if com[0]:
+        return com[0]
+    return {}
+
+def get_user(id):
+    with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
+        sel = db.prepare("SELECT * FROM log_pass WHERE user_id=$1 ")
+        com = sel(id)
+    if com[0]:
+        return com[0]
+    return {}
 
 if __name__ == "__main__":
     app.run(debug=True)

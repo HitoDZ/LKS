@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <title>Reg</title>
@@ -9,8 +10,8 @@
 
 </head>
 <body>
-  <form method="post" class="Test">
-    <h1>Sign up</h1>
+  <form method="post" class="Test" id="form1">
+    <h1>{{comand['name']}}</h1>
     <table border="0" width="15%" >
 
               <tr>
@@ -52,6 +53,7 @@
             <!--   <tr><td colspan="4">{{form.submit(class='button')}}</td></tr>-->
             </table>
             <input type="button" onclick="ask(this.form)" value="Log in">
+            {{ form.csrf_token }}
           </form>
 
 

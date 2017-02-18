@@ -15,7 +15,6 @@ function resetError(container) {
 
   }
 }
-
 function valid(form){
 
   var validate = 1;
@@ -109,15 +108,28 @@ function check_log_pass(elems) {
 
 /////////////////////////////////////////////////////judgment
 
+function falert(form){
+  document.getElementById("form1").submit()
+}
+
 function ask(form){
   var div = document.createElement('div');
 
+  var metas = document.getElementsByTagName('meta');
+    for (var i=0; i<metas.length; i++) {
 
+        if (metas[i].getAttribute("name") == "csrf-token") {
+           var csrftoken = metas[i].getAttribute("content");
+           break;
+
+        }
+      }
 
   div.className = "modal_box";
   div.innerHTML = "<form method='post' id='forma'>Are you sure?<br>"+
   "<input type='button' value='No' onclick=remove_modalBox()>&nbsp"+
-  "<input type='button' value='Yes'onclick=falert(this.form)></form>";
+  "<input type='button' value='Yes'onclick=falert(this.form)>"+
+  "<input type='hidden' name='csrf' value="+csrftoken+"></form>";
   document.body.appendChild(div)
 }
 
