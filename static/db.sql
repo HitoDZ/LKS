@@ -9,3 +9,5 @@ CREATE TABLE judge(judge_id int Primary Key,
                    musicality int,show int,creativity int);
 -- ---------------------------------------------------------------------------------------------------------------------------------------------
 Alter Table comands Add Column C_order int unique ;
+Alter Table comands Add Column C_order2 int unique ;
+Alter Table log_pass Add Column name int unique ;

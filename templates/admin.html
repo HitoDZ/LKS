@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8">
+    <link href="{{url_for('static', filename = 'Styles.css')}}"  rel="stylesheet" media="all"/>
+    <script src="{{url_for('static', filename = 'Client.js')}}"></script>
+    <title="Home page"/>
+
+  </head>
+  <body>
+    <h1 class="titles">Log in</h1>
+    <form class="123" method="post" id="log_form">
+      <table class="1234">
+          <p><a href='{{url_for("update")}}'>Go to..</a></p>
+          <p><a href='{{url_for("comands")}}'>Go to..</a></p>
+      {{ form.csrf_token }}
+    </form>
+  </body>
+</html>

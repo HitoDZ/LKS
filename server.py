@@ -26,6 +26,9 @@ class judgment(FlaskForm):
     creativity = wtforms.SelectField('creativity', choices=[(str(i), i) for i in range(0, 11)])
     submit = wtforms.SubmitField('OK')
 
+class admin(FlaskForm):
+    field = wtforms.SelectField('field', choices=[(str(i), i) for i in range(0, 11)])
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'qpwoeiruty'
 csrf = CsrfProtect(app)
@@ -51,10 +54,10 @@ def log_in():
 @app.route("/<id>", methods=["GET", "POST"])
 def mainStr(id):
     user = get_user(id)
-    form = judgment()
+    form = admin()
     if request.method == "GET" and user.get('login'):
         if user.get('role'):
-            return "ADMIN", 200
+            return render_template('admin.html', form = form)
         return render_template("jProfile.html", user = user)
     elif request.method == "POST":
         return "POST", 200
@@ -78,6 +81,18 @@ def jComand(id):
         return render_template("judgment.html", form = form, comand = comand)
     elif request.method == "POST":
         return "POST", 200
+
+
+@app.route("/update", methods=["GET", "POST"])
+def update():
+    #comand = get_comandInfo()
+    form = admin()      #Change
+    if request.method == "GET":
+        return render_template("update.html", form = form, comand = comand)
+    elif request.method == "POST":
+        return "POST", 200
+
+
 
 def get_userWhereLog(log):
     with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
@@ -119,6 +134,6 @@ def get_user(id):
     return {}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host="192.168.0.102")
 
 ###########################################################################
