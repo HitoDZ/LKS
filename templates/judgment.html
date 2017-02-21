@@ -1,61 +1,56 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-  <meta charset="utf-8">
-  <title>Reg</title>
-  <link href="{{url_for('static', filename = 'Style.css')}}" rel="stylesheet" media="all"/>
-  <script src="{{url_for('static', filename = 'Client.js')}}"></script>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Reg</title>
+    <link href="{{url_for('static', filename = 'Style.css')}}" rel="stylesheet" media="all" />
+    <script src="{{url_for('static', filename = 'Client.js')}}"></script>
 </head>
+
 <body>
-  <form method="post" class="Test" id="form1">
-    <h1>{{comand['name']}}</h1>
-    <table border="0" width="15%" >
+    <form method="post" class="Test" id="form1">
+        <h1>{{comand['name']}}</h1>
+        <table border="0" width="15%">
 
-              <tr>
-              <td>{{form.technique(class='textbox')}}</td>
-              <td>{{form.technique.label }}</td>
+            <tr>
+                <td>{{form.technique(class='textbox')}}</td>
+                <td>{{form.technique.label }}</td>
 
-              </tr>
-              <tr>
+            </tr>
+            <tr>
                 <td>{{form.production(class='textbox')}}</td>
-
-              <td>{{form.production.label }}</td>
-              </tr>
-              <tr>
+                <td>{{form.production.label }}</td>
+            </tr>
+            <tr>
                 <td>{{form.teamwork(class='textbox')}}</td>
-
-              <td>{{form.teamwork.label }}</td>
-              </tr>
-              <tr>
+                <td>{{form.teamwork.label }}</td>
+            </tr>
+            <tr>
                 <td>{{form.artistry(class='textbox')}}</td>
-
-              <td>{{form.artistry.label }}</td>
-              </tr>
-              <tr>
+                <td>{{form.artistry.label }}</td>
+            </tr>
+            <tr>
                 <td>{{form.musicality(class='textbox')}}</td>
-
-              <td>{{form.musicality.label }}</td>
-              </tr>
-              <tr>
+                <td>{{form.musicality.label }}</td>
+            </tr>
+            <tr>
                 <td>{{form.show(class='textbox')}}</td>
-
-              <td>{{form.show.label }}</td>
-              </tr>
-              <tr>
+                <td>{{form.show.label }}</td>
+            </tr>
+            <tr>
                 <td>{{form.creativity(class='textbox')}}</td>
-
-              <td>{{form.creativity.label }}</td>
-              </tr>
+                <td>{{form.creativity.label }}</td>
+            </tr>
             <!--  <tr><br></tr>-->
             <!--   <tr><td colspan="4">{{form.submit(class='button')}}</td></tr>-->
-            </table>
-            <input type="button" onclick="ask(this.form)" value="Log in">
-            {{ form.csrf_token }}
-          </form>
+        </table>
+        <input type="button" onclick="ask(this.form)" value="Log in"> {{ form.csrf_token }}
+    </form>
 
 
-        </body>
-      </html>
+</body>
+
+</html>

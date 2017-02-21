@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>User profile</title>
+    <link href="{{url_for('static', filename = 'Style.css')}}" rel="stylesheet" media="all" />
+    <script src="{{url_for('static', filename = 'Client.js')}}"></script>
+
+</head>
+
+<body>
+  <form id='comand_form'>
+    <tr id="comand1">
+        <td>{{form.name(class='textbox')}}</td>
+        <td>{{form.name.label }}</td>
+    </tr>
+    <tr id="comand2">
+        <td>{{form.nomination(class='textbox')}}</td>
+        <td>{{form.nomination.label }}</td>
+    </tr>
+    <tr id="comand3">
+        <td>{{form.C_order(class='textbox')}}</td>
+        <td>{{form.C_order.label }}</td>
+    </tr>
+    <input type="button" onclick="(this.form)" value="Create">
+    {{ form.csrf_token }}
+  </form>
+
+</body>
+</html>

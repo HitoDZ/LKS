@@ -11,8 +11,9 @@
     <h1 class="titles">Log in</h1>
     <form class="123" method="post" id="log_form">
       <table class="1234">
-          <p><a href='{{url_for("update")}}'>Go to..</a></p>
-          <p><a href='{{url_for("comands")}}'>Go to..</a></p>
+          <p><a href='{{url_for("update")}}'>Update</a></p>
+          <p><a href='{{url_for("comands")}}'>Create command</a></p>
+
       {{ form.csrf_token }}
     </form>
   </body>

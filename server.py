@@ -29,10 +29,17 @@ class judgment(FlaskForm):
 class admin(FlaskForm):
     field = wtforms.SelectField('field', choices=[(str(i), i) for i in range(0, 11)])
 
+class comands(FlaskForm):
+    name = wtforms.StringField("name", validators=[Required()])
+    nomination = wtforms.StringField("nomination", validators=[Required()])
+    C_order = wtforms.StringField("C_order", validators=[Required()])
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'qpwoeiruty'
 csrf = CsrfProtect(app)
 csrf.init_app(app)
+
+
 
 
 
@@ -83,12 +90,12 @@ def jComand(id):
         return "POST", 200
 
 
-@app.route("/update", methods=["GET", "POST"])
+@app.route("/update/", methods=["GET", "POST"])
 def update():
     #comand = get_comandInfo()
     form = admin()      #Change
     if request.method == "GET":
-        return render_template("update.html", form = form, comand = comand)
+        return render_template("update.html", form = form)#, comand = comand)
     elif request.method == "POST":
         return "POST", 200
 
@@ -102,6 +109,16 @@ def get_userWhereLog(log):
         return user[0]
     return{}
 
+def update_comand_order(name, order):
+    with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
+        sel = db.prepare("UPDATE comands WHERE name=$1 SET c_order=$2;")
+        user = sel(name, order)
+
+def insert_command(id, name, nomination, order):
+    with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
+        sel = db.prepare("INSERT INTO comands (comand_id, name, nomination, c_order) VALUES($1, $2, $3, $4)")
+        user = sel(id, name, nomination, order)
+
 def check_logIs(log):
     with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE login=$1;")
@@ -109,6 +126,7 @@ def check_logIs(log):
     if user:
         return True
     return False
+
 def check_passIs(log, password):
     with postgresql.open("pq://postgres:070698@localhost/LKS") as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE login=$1 AND password=$2;")
@@ -134,6 +152,6 @@ def get_user(id):
     return {}
 
 if __name__ == "__main__":
-    app.run(debug=True,host="192.168.0.102")
+    app.run(debug=True )#,host="192.168.0.102")
 
 ###########################################################################
