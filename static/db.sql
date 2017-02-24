@@ -10,5 +10,27 @@ CREATE TABLE judge(judge_id int Primary Key,
 -- ---------------------------------------------------------------------------------------------------------------------------------------------
 Alter Table comands Add Column C_order int unique ;
 Alter Table comands Add Column C_order2 int unique ;
-Alter Table log_pass Add Column name int unique ;
+Alter Table log_pass Add Column name VARCHAR(45) unique ;
 Alter Table judge Add Column sum int ;
+
+-- --------
+Alter table judge add column final bool not null;
+
+Create or replace function judgesum() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+UPDATE comands SET grad1=grad1+new.technique+new.production+new.teamwork+new.artistry+new.musicality+new.show+new.creativity
+WHERE comand_id=new.comand_id and final='0';
+RETURN NEW;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+DELETE FROM JUDGE;
+CREATE TRIGGER sumgrad
+after insert on judge for each row execute procedure judgesum();
+SELECT * FROM log_pass;
+SELECT * FROM comands ;
+SELECT * FROM judge;
+INSERT INTO judge VALUES(2,'101010','101010',10,10,10,10,10,10,10,0,'0');
+
+ALTER TABLE judge ADD CONSTRAINT unqi UNIQUE (user_id,comand_id,final);
