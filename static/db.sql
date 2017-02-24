@@ -34,3 +34,18 @@ SELECT * FROM judge;
 INSERT INTO judge VALUES(2,'101010','101010',10,10,10,10,10,10,10,0,'0');
 
 ALTER TABLE judge ADD CONSTRAINT unqi UNIQUE (user_id,comand_id,final);
+
+-- --------- NEW function to Nastya
+Create or replace function judgesum() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+IF new.final='0' then
+UPDATE comands SET grad1=grad1+new.technique+new.production+new.teamwork+new.artistry+new.musicality+new.show+new.creativity
+WHERE comand_id=new.comand_id and new.final='0';
+ELSE
+UPDATE comands SET grad2=grad2+new.technique+new.production+new.teamwork+new.artistry+new.musicality+new.show+new.creativity
+WHERE comand_id=new.comand_id and new.final='1';
+END IF;
+RETURN NEW;
+END;
+$BODY$ LANGUAGE plpgsql;
