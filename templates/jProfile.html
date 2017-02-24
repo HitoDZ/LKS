@@ -10,8 +10,10 @@
 
   </head>
   <body>
-    <h1>Hello, {{user['login']}}</h1>
-    <p><a href='{{url_for("jComand", id = "ZXCVBN")}}'>Go to..</a></p>
-
+    <h1>Hello, {{user['name']}}</h1>
+    <p><a href='{{url_for("jComand")}}'><button>Go to judge</button></a></p>
+    {%for com in comands%}
+      <p>{{com['name']}}  {{com['grad1']}}  {{com['grad2']}}</p>
+    {%endfor%}
   </body>
 </html>
