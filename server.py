@@ -10,6 +10,7 @@ import os
 import string
 import hashlib
 from wtforms.validators import Required, EqualTo
+import Config
 
 class Log_in(FlaskForm):
     login = wtforms.StringField("Login", validators=[Required()])
@@ -17,13 +18,13 @@ class Log_in(FlaskForm):
 #    submit = wtforms.SubmitField('Log in')
 
 class judgment(FlaskForm):
-    technique = wtforms.SelectField('technique', choices=[(str(i), i) for i in range(0, 11)])
-    production = wtforms.SelectField('production', choices=[(str(i), i) for i in range(0,11)])
-    teamwork = wtforms.SelectField('teamwork', choices=[(str(i), i) for i in range(0, 11)])
-    artistry = wtforms.SelectField('artistry', choices=[(str(i), i) for i in range(0, 11)])
-    musicality = wtforms.SelectField('musicality', choices=[(str(i), i) for i in range(0,11)])
-    show = wtforms.SelectField('show', choices=[(str(i), i) for i in range(0, 11)])
-    creativity = wtforms.SelectField('creativity', choices=[(str(i), i) for i in range(0, 11)])
+    technique = wtforms.SelectField('Technique, (Техника)', choices=[(str(i), i) for i in range(0, 11)])
+    production = wtforms.SelectField('Direction, (Постановка)', choices=[(str(i), i) for i in range(0,11)])
+    teamwork = wtforms.SelectField('Teamwork, (Командная работа)', choices=[(str(i), i) for i in range(0, 11)])
+    artistry = wtforms.SelectField('Artistry, (Артистизм)', choices=[(str(i), i) for i in range(0, 11)])
+    musicality = wtforms.SelectField('Musicality, (Музыкальность)', choices=[(str(i), i) for i in range(0,11)])
+    show = wtforms.SelectField('Show, (Шоу)', choices=[(str(i), i) for i in range(0, 11)])
+    creativity = wtforms.SelectField('Creativity, (Креативность)', choices=[(str(i), i) for i in range(0, 11)])
     submit = wtforms.SubmitField('OK')
 
 class admin(FlaskForm):
@@ -64,7 +65,7 @@ def log_in():
 @app.route("/<id>", methods=["GET", "POST"])
 def mainStr(id):
     form = admin()
-    comands = get_allComands()
+    comands = get_allComands(id)
     if request.method == "GET" and session.get('id') == id:
         if session.get('role'):
             return render_template('admin.html', form = form)
@@ -108,7 +109,7 @@ def update():
         return "POST", 200
 
 def insert_judgRes(iduser, idcom, form):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("INSERT INTO judge VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)")
         try:
             com = sel(int(random.random()*1000), iduser, idcom, int(form.technique.data),
@@ -119,14 +120,14 @@ def insert_judgRes(iduser, idcom, form):
         except Exception:
             print('No')
 
-def get_allComands():
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
-        sel = db.prepare("SELECT * FROM comands")
-        com = sel()
-    return com
+def get_allComands(id):                                   #Вот она
+    with postgresql.open(Config.dbLog) as db:
+        sel = db.prepare("SELECT * FROM judge natural join comands where user_id=$1; ")
+        jud = sel(id)
+    return jud
 
 def get_userWhereLog(log):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE login=$1;")
         user = sel(log.lower())
     if user:
@@ -134,17 +135,17 @@ def get_userWhereLog(log):
     return{}
 
 def update_comand_order(name, order):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("UPDATE comands WHERE name=$1 SET c_order=$2;")
         user = sel(name, order)
 
 def insert_command(id, name, nomination, order):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("INSERT INTO comands (comand_id, name, nomination, c_order) VALUES($1, $2, $3, $4)")
         user = sel(id, name, nomination, order)
 
 def check_logIs(log):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE login=$1;")
         user = sel(log.lower())
     if user:
@@ -152,7 +153,7 @@ def check_logIs(log):
     return False
 
 def check_passIs(log, password):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE login=$1 AND password=$2;")
         user = sel(log.lower(),hashlib.md5(password.encode('utf8')).hexdigest())
     if user:
@@ -160,7 +161,7 @@ def check_passIs(log, password):
     return False
 
 def get_comandInfo(id):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("SELECT * FROM comands WHERE C_order=$1 ")
         com = sel(id)
     if com:
@@ -168,7 +169,7 @@ def get_comandInfo(id):
     return {}
 
 def get_user(id):
-    with postgresql.open("pq://postgres:poqwiueryt@localhost/LKS") as db:
+    with postgresql.open(Config.dbLog) as db:
         sel = db.prepare("SELECT * FROM log_pass WHERE user_id=$1 ")
         com = sel(id)
     if com:
@@ -176,6 +177,6 @@ def get_user(id):
     return {}
 
 if __name__ == "__main__":
-    app.run(debug=True ,host="192.168.1.10")
+    app.run(debug=True)# ,host="192.168.1.10")
 
 ###########################################################################
